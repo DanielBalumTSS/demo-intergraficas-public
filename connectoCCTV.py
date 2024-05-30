@@ -5,7 +5,7 @@ This code is used to connect to the CCTV, which is paired with AWS through a sit
 
 import cv2
 import threading
-
+import time
 class ReadingCamera:
     def __init__(self,rtsp):
         self.rtsp = rtsp
@@ -22,19 +22,21 @@ class ReadingCamera:
                 if not ret:
                     print(f"Error at reading camera at {rtsp}")
                     break
-            
+
                 #Display video
-                cv2.imshow(f"Camera{rtsp}",frame)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
-                
+                #cv2.imshow(f"Camera{rtsp}",frame)
+                print(f"Camera {rtsp}: Frame received with dimensions {frame.shape}")
+               # if cv2.waitKey(1) & 0xFF == ord('q'):
+                   # break
+                time.sleep(0.1)
+
             video_capture.release()
-            cv2.destroyAllWindows()
+           #cv2.destroyAllWindows()
 
 
         except Exception as e:
             print(f"Error at camera {rtsp}: {e}")
-        
+
     def startReading (self):
         for url in self.rtsp:
             thread = threading.Thread(target=self.readVideo, args=(url,))
